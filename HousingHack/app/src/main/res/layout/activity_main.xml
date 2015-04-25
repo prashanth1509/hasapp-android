@@ -7,8 +7,81 @@
     <!-- As the main content view, the view below consumes the entire
          space available using match_parent in both dimensions. -->
     <FrameLayout android:id="@+id/container" android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="#fff"/>
+    <android.support.v4.widget.SlidingPaneLayout
+        android:id="@+id/SlidingPanel"
+        android:layout_width="match_parent"
+        android:background="#fff"
+        android:layout_height="match_parent"
+        android:layout_gravity="right">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="match_parent"
+                android:text="Default Attribute"
+                android:gravity="center"
+                android:padding="8dp"
+                android:textSize="20dp"
+                android:textColor="#fff"
+                android:background="#000"
+                android:layout_height="wrap_content" />
+            <ListView
+                android:layout_width="match_parent"
+                android:id="@+id/list2"
+                android:background="#d3d3d3"
+                android:layout_height="match_parent"/>
+            </LinearLayout>
 
+    </android.support.v4.widget.SlidingPaneLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_above="@+id/ll2"
+            android:layout_height="match_parent">
+            <Gallery
+                android:layout_width="match_parent"
+                android:id="@+id/gallery1"
+                android:layout_height="170dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:text="Chat History"
+                android:gravity="center"
+                android:padding="8dp"
+                android:textSize="20dp"
+                android:textColor="#fff"
+                android:background="#7307BA"
+                android:layout_height="wrap_content" />
+            <ListView
+                android:layout_width="match_parent"
+                android:id="@+id/list1"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:padding="5dp"
+            android:id="@+id/ll2"
+            android:layout_alignParentBottom="true"
+            android:background="#bf000000"
+            android:layout_height="50sp">
+            <EditText
+                android:layout_width="0dp"
+                android:layout_weight="0.9"
+                android:layout_height="match_parent" />
+            <ImageView
+                android:layout_width="0dip"
+                android:layout_weight="0.15"
+                android:src="@android:drawable/ic_menu_send"
+                android:layout_height="match_parent" />
+            </LinearLayout>
+    </RelativeLayout>
     <!-- android:layout_gravity="start" tells DrawerLayout to treat
          this as a sliding drawer on the left side for left-to-right
          languages and on the right side for right-to-left languages.
@@ -20,5 +93,4 @@
         android:layout_width="@dimen/navigation_drawer_width" android:layout_height="match_parent"
         android:layout_gravity="start" android:name="com.housinghack.NavigationDrawerFragment"
         tools:layout="@layout/fragment_navigation_drawer" />
-
 </android.support.v4.widget.DrawerLayout>

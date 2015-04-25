@@ -1,5 +1,21 @@
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:choiceMode="singleChoice"
-    android:divider="@android:color/transparent" android:dividerHeight="0dp"
-    android:background="#cccc" tools:context=".NavigationDrawerFragment" />
+    android:orientation="vertical" android:layout_height="match_parent"
+    tools:context=".NavigationDrawerFragment">
+<TextView
+    android:layout_width="match_parent"
+    android:text="anme"
+    android:id="@+id/userr"
+    android:textSize="20dp"
+    android:padding="8dp"
+    android:layout_height="wrap_content" />
+<ListView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/list3"
+    android:choiceMode="singleChoice"
+    android:divider="@android:color/transparent"
+    android:dividerHeight="0dp"
+    android:background="#ccc"
+     />
+</LinearLayout>

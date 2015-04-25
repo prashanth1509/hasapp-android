@@ -1,6 +1,13 @@
 package com.housinghack;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -12,16 +19,35 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
+import android.widget.Gallery;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONObject;
+//import org.springframework.http.converter.StringHttpMessageConverter;
+//import org.springframework.web.client.RestTemplate;
+;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
-
+    SlidingPaneLayout mSlidingPanel;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -36,17 +62,69 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+
         mTitle = getTitle();
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+        Gallery gallery=(Gallery) findViewById(R.id.gallery1);
+        GalHelper galHelper=new GalHelper(this);
+        gallery.setAdapter(galHelper);
+        mSlidingPanel = (SlidingPaneLayout) findViewById(R.id.SlidingPanel);
+        mSlidingPanel.setParallaxDistance(180);
+        mSlidingPanel.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+        });
+        ListView listView=(ListView) findViewById(R.id.list1);
+        ArrayList<String> uname=new ArrayList<String>();
+        uname.add("susee");
+        uname.add("iyer");
+        ArrayList<String> content=new ArrayList<String>();
+        content.add("jjkjk s flajksfda jk sadfjkasf asfasdfa");
+        content.add("sdfasdfas asdfa fasfd asfasfdasfas fsf asd");
+        ChatHelper chatHelper=new ChatHelper(this,uname,content);
+        listView.setAdapter(chatHelper);
+        ListView listView1=(ListView) findViewById(R.id.list2);
+        ArrayList<String> atr=new ArrayList<String>();
+        atr.add("water supply");
+        atr.add("Fan");
+        atr.add("fridge");
+        atr.add("washing");
+        AttrHelper1 attrHelper1=new AttrHelper1(this,atr);
+        listView1.setAdapter(attrHelper1);
+        SharedPreferences sharedPreferences=getSharedPreferences(Login.MyPREFERENCES,Context.MODE_PRIVATE);
+        String uuuname=""+sharedPreferences.getString(Login.userstr,null);
+        TextView textView=(TextView) findViewById(R.id.userr);
+        textView.setText("Hi "+uuuname);
+        //new Getdata().execute("http://localhost/info.php");
     }
+    private class Getdata extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            String response = "";
+            for (String url : urls) {
+                try {
+//                    RestTemplate restTemplate = new RestTemplate();
+//                    restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+//                    response = restTemplate.getForObject(url, String.class, "Android");
+                } catch (Exception e) {
 
+                }
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            System.out.println("sdfafsd" + result);
+        }
+    }
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
@@ -100,9 +178,14 @@ public class MainActivity extends ActionBarActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast.makeText(getBaseContext(), "Example action.", Toast.LENGTH_SHORT).show();
             return true;
         }
-
+        if (item.getItemId() == R.id.bsearch) {
+            Toast.makeText(getBaseContext(), "Example action.", Toast.LENGTH_SHORT).show();
+            mSlidingPanel.openPane();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
