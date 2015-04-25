@@ -9,7 +9,7 @@ import android.view.MenuItem;
 
 
 public class Getqr extends ActionBarActivity {
-
+    public static final String Data="data";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +21,11 @@ public class Getqr extends ActionBarActivity {
         String data1=""+data.toString();
         String[] uurl=data1.split("#");
         String room_id=uurl[1];
+        System.out.println("rooom"+room_id);
+        finish();
+        Intent intent1=new Intent(this,MainActivity.class);
+        intent1.putExtra(Data,room_id);
+        startActivity(intent);
 
     }
 

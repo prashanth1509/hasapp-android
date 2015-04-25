@@ -29,6 +29,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.housinghack.datasources.AttributeDataSource;
+import com.housinghack.entities.AttributeCollection;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -57,6 +60,7 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,14 +106,19 @@ public class MainActivity extends ActionBarActivity
         String uuuname=""+sharedPreferences.getString(Login.userstr,null);
         TextView textView=(TextView) findViewById(R.id.userr);
         textView.setText("Hi "+uuuname);
-        //new Getdata().execute("http://localhost/info.php");
+        //new Getdata().execute("");
     }
     private class Getdata extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
+            Intent intent=getIntent();
+            String rmid=intent.getStringExtra(Getqr.Data);
             for (String url : urls) {
                 try {
+                    AttributeDataSource attributeDataSource=new AttributeDataSource();
+                    AttributeCollection atts = attributeDataSource.getAttributes(rmid);
+                    System.out.println(atts.attributeList.get(0).title);
 //                    RestTemplate restTemplate = new RestTemplate();
 //                    restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
 //                    response = restTemplate.getForObject(url, String.class, "Android");

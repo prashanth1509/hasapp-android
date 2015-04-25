@@ -29,7 +29,6 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -38,20 +37,12 @@
             android:label="@string/title_activity_getqr" >
             <intent-filter android:label="Housing App" >
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Accepts URIs that begin with "http://www.example.com/gizmos” -->
                 <data
                     android:host="hsapp-backend.herokuapp.com"
                     android:pathPrefix="/triggerinvite"
                     android:scheme="http" />
-                <!-- note that the leading "/" is required for pathPrefix -->
-                <!--
-                Accepts URIs that begin with "example://gizmos”
-                <data android:scheme="example"
-                      android:host="gizmos" />
-                -->
             </intent-filter>
         </activity>
     </application>
