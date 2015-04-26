@@ -4,16 +4,11 @@
     android:background="#fff"
     android:padding="5dp"
     android:layout_height="wrap_content">
-    <ImageView
-        android:layout_width="0dp"
-        android:layout_weight="0.2"
-        android:src="@drawable/quotation"
-        android:layout_height="wrap_content" />
     <TextView
         android:layout_width="0dp"
-        android:layout_weight="0.6"
+        android:layout_weight="0.7"
         android:text="Attr 1"
-        android:id="@+id/atrname"
+        android:id="@+id/attrname"
         android:textSize="17dp"
         android:paddingLeft="5dp"
         android:textStyle="bold"
@@ -21,22 +16,34 @@
         android:layout_height="wrap_content" />
     <TextView
         android:layout_width="0dp"
-        android:layout_weight="0.3"
+        android:layout_weight="0.1"
         android:id="@+id/like"
-        android:text="like"
+        android:text="00"
 android:layout_marginLeft="5dp"
         android:textSize="17dp"
         android:textStyle="bold"
         android:textColor="#00f"
         android:layout_height="wrap_content" />
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_weight="0.1"
+        android:id="@+id/ilike"
+        android:src="@drawable/ssort"
+        android:layout_height="wrap_content" />
     <TextView
         android:layout_width="0dp"
-        android:layout_weight="0.3"
+        android:layout_weight="0.1"
         android:id="@+id/unlike"
-        android:text="unlike"
+        android:text="00"
         android:layout_marginLeft="5dp"
         android:textSize="17dp"
         android:textStyle="bold"
         android:textColor="#00f"
+        android:layout_height="wrap_content" />
+    <ImageView
+        android:layout_width="0dp"
+        android:id="@+id/idislike"
+        android:layout_weight="0.1"
+        android:src="@drawable/ssort"
         android:layout_height="wrap_content" />
 </LinearLayout>

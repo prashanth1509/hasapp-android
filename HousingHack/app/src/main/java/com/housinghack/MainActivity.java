@@ -24,19 +24,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.housinghack.datasources.AttributeDataSource;
+import com.housinghack.datasources.MessageDataSource;
+import com.housinghack.datasources.UsersDataSource;
 import com.housinghack.entities.AttributeCollection;
+import com.housinghack.entities.MessageCollection;
+import com.housinghack.entities.User;
+import com.housinghack.entities.UserCollection;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
+import org.lucasr.twowayview.TwoWayView;
 //import org.springframework.http.converter.StringHttpMessageConverter;
 //import org.springframework.web.client.RestTemplate;
 ;
@@ -60,12 +67,21 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
-
+    UserCollection userColl;
+    String uuuname = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread thread, Throwable e) {
+                e.printStackTrace();
+            }
+        });
+
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 
@@ -75,8 +91,8 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-        Gallery gallery=(Gallery) findViewById(R.id.gallery1);
-        GalHelper galHelper=new GalHelper(this);
+        Gallery gallery = (Gallery) findViewById(R.id.gallery1);
+        GalHelper galHelper = new GalHelper(this);
         gallery.setAdapter(galHelper);
         mSlidingPanel = (SlidingPaneLayout) findViewById(R.id.SlidingPanel);
         mSlidingPanel.setParallaxDistance(180);
@@ -85,55 +101,161 @@ public class MainActivity extends ActionBarActivity
                 return false;
             }
         });
-        ListView listView=(ListView) findViewById(R.id.list1);
-        ArrayList<String> uname=new ArrayList<String>();
-        uname.add("susee");
-        uname.add("iyer");
-        ArrayList<String> content=new ArrayList<String>();
-        content.add("jjkjk s flajksfda jk sadfjkasf asfasdfa");
-        content.add("sdfasdfas asdfa fasfd asfasfdasfas fsf asd");
-        ChatHelper chatHelper=new ChatHelper(this,uname,content);
-        listView.setAdapter(chatHelper);
-        ListView listView1=(ListView) findViewById(R.id.list2);
-        ArrayList<String> atr=new ArrayList<String>();
-        atr.add("water supply");
-        atr.add("Fan");
-        atr.add("fridge");
-        atr.add("washing");
-        AttrHelper1 attrHelper1=new AttrHelper1(this,atr);
-        listView1.setAdapter(attrHelper1);
-        SharedPreferences sharedPreferences=getSharedPreferences(Login.MyPREFERENCES,Context.MODE_PRIVATE);
-        String uuuname=""+sharedPreferences.getString(Login.userstr,null);
-        TextView textView=(TextView) findViewById(R.id.userr);
-        textView.setText("Hi "+uuuname);
-        //new Getdata().execute("");
+
+        SharedPreferences sharedPreferences = getSharedPreferences(Login.MyPREFERENCES, Context.MODE_PRIVATE);
+        uuuname = "" + sharedPreferences.getString(Login.userstr, null);
+
+        TextView textView = (TextView) findViewById(R.id.userr);
+        textView.setText("Hi " + uuuname);
+
+//        Intent intent=getIntent();
+//        String rmid=""+intent.getStringExtra(Getqr.Data);
+
+        SharedPreferences sharedPreferences1 = getSharedPreferences(Getqr.MyPREFERENCES, Context.MODE_PRIVATE);
+        String rmid = "" + sharedPreferences1.getString(Getqr.use, null);
+
+        if (!rmid.equals("null")) {
+            new Getdata().execute("");
+            new GetMsgdata().execute("");
+            new GetUserdata().execute("");
+
+        }
+
     }
-    private class Getdata extends AsyncTask<String, Void, String> {
+
+    private class Getdata extends AsyncTask<String, Void, AttributeCollection> {
         @Override
-        protected String doInBackground(String... urls) {
-            String response = "";
-            Intent intent=getIntent();
-            String rmid=intent.getStringExtra(Getqr.Data);
+        protected AttributeCollection doInBackground(String... urls) {
+            AttributeCollection attributeCollection = new AttributeCollection();
+//            Intent intent=getIntent();
+//            String rmid=intent.getStringExtra(Getqr.Data);
+            SharedPreferences sharedPreferences1 = getSharedPreferences(Getqr.MyPREFERENCES, Context.MODE_PRIVATE);
+            String rmid = "" + sharedPreferences1.getString(Getqr.use, null);
+            System.out.println("asdfas" + rmid);
             for (String url : urls) {
                 try {
-                    AttributeDataSource attributeDataSource=new AttributeDataSource();
-                    AttributeCollection atts = attributeDataSource.getAttributes(rmid);
-                    System.out.println(atts.attributeList.get(0).title);
-//                    RestTemplate restTemplate = new RestTemplate();
-//                    restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
-//                    response = restTemplate.getForObject(url, String.class, "Android");
+                    AttributeDataSource attributeDataSource = new AttributeDataSource();
+                    attributeCollection = attributeDataSource.getAttributes(rmid);
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
             }
-            return response;
+            return attributeCollection;
         }
 
         @Override
-        protected void onPostExecute(String result) {
-            System.out.println("sdfafsd" + result);
+        protected void onPostExecute(AttributeCollection result) {
+            name(result);
         }
     }
+
+    public void name(AttributeCollection res) {
+        ListView listView1 = (ListView) findViewById(R.id.list2);
+        AttrHelper1 attrHelper1 = new AttrHelper1(this, res);
+        listView1.setAdapter(attrHelper1);
+    }
+
+    private class GetMsgdata extends AsyncTask<String, Void, MessageCollection> {
+        @Override
+        protected MessageCollection doInBackground(String... urls) {
+            MessageCollection attributeCollection = new MessageCollection();
+//            Intent intent=getIntent();
+//            String rmid=intent.getStringExtra(Getqr.Data);
+            SharedPreferences sharedPreferences1 = getSharedPreferences(Getqr.MyPREFERENCES, Context.MODE_PRIVATE);
+            String rmid = "" + sharedPreferences1.getString(Getqr.use, null);
+            System.out.println("asdfas" + rmid);
+            for (String url : urls) {
+                try {
+                    MessageDataSource attributeDataSource = new MessageDataSource();
+                    attributeCollection = attributeDataSource.getContents(rmid, 0);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return attributeCollection;
+        }
+
+        @Override
+        protected void onPostExecute(MessageCollection result) {
+            user(result);
+        }
+    }
+
+    public void user(MessageCollection ress) {
+        try {
+            ListView listView = (ListView) findViewById(R.id.list1);
+            ChatHelper chatHelper = new ChatHelper(this, ress);
+            listView.setAdapter(chatHelper);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private class GetUserdata extends AsyncTask<String, Void, UserCollection> {
+        @Override
+        protected UserCollection doInBackground(String... urls) {
+            Intent intent = getIntent();
+            UserCollection uc = new UserCollection();
+            //String rmid=intent.getStringExtra(Getqr.Data);
+            SharedPreferences sharedPreferences1 = getSharedPreferences(Getqr.MyPREFERENCES, Context.MODE_PRIVATE);
+            String rmid = "" + sharedPreferences1.getString(Getqr.use, null);
+            try {
+                UsersDataSource attributeDataSource = new UsersDataSource();
+                uc = attributeDataSource.getUsers(rmid);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return uc;
+        }
+
+        @Override
+        protected void onPostExecute(UserCollection result) {
+            getuser(result);
+        }
+    }
+
+    public void getuser(UserCollection res) {
+        TwoWayView listview = (TwoWayView) findViewById(R.id.lvItems);
+        GalleryImageAdapter galleryImageAdapter = new GalleryImageAdapter(this, res);
+        listview.setAdapter(galleryImageAdapter);
+
+    }
+
+    public void send(View view) {
+        EditText editText = (EditText) findViewById(R.id.sendtext);
+        String text = editText.getText().toString();
+        new Senddata().execute("" + text);
+    }
+
+    private class Senddata extends AsyncTask<String, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(String... urls) {
+            Boolean attributeCollection = true;
+            Intent intent = getIntent();
+            //String rmid=intent.getStringExtra(Getqr.Data);
+            SharedPreferences sharedPreferences1 = getSharedPreferences(Getqr.MyPREFERENCES, Context.MODE_PRIVATE);
+            String rmid = "" + sharedPreferences1.getString(Getqr.use, null);
+            System.out.println("asdfas" + rmid);
+            for (String url : urls) {
+                try {
+                    MessageDataSource attributeDataSource = new MessageDataSource();
+                    attributeCollection = attributeDataSource.sendMessage(true, rmid, uuuname, "", "", url, "");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return attributeCollection;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if (result == true)
+                Toast.makeText(getBaseContext(), "Message Sent Successful", Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(getBaseContext(), "Error in Message sent", Toast.LENGTH_LONG).show();
+        }
+    }
+
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments

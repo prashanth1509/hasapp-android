@@ -1,9 +1,12 @@
 package com.housinghack.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Created by prashanth.a on 25/04/15.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Message {
 
     public String id;

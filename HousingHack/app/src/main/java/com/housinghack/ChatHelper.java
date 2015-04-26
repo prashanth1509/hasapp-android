@@ -12,23 +12,32 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.housinghack.entities.MessageCollection;
+import com.housinghack.entities.User;
+import com.housinghack.entities.UserCollection;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChatHelper extends BaseAdapter {
 
     private Context mContext;
-    public ArrayList<String> name;
-    public ArrayList<String> chtext;
+    public MessageCollection cont;
 
-    public ChatHelper(Context context,ArrayList<String> name,ArrayList<String> chtext) {
+    public ChatHelper(Context context, MessageCollection cont) {
         mContext = context;
-        this.name=name;
-        this.chtext=chtext;
+        this.cont = cont;
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread thread, Throwable e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
     public int getCount() {
-        return name.size();
+        return cont.getMessages().size();
     }
 
     @Override
@@ -48,7 +57,7 @@ public class ChatHelper extends BaseAdapter {
 
     // Override this method according to your need
     @Override
-    public View getView(int index,View view, ViewGroup viewGroup) {
+    public View getView(int index, View view, ViewGroup viewGroup) {
         // TODO Auto-generated method stub
         View rowView = view;
         try {
@@ -64,10 +73,10 @@ public class ChatHelper extends BaseAdapter {
                 rowView.setTag(viewHolder);
             }
             ViewHolder viewHolder = (ViewHolder) rowView.getTag();
-            viewHolder.textView1.setText(name.get(index));
-            viewHolder.textView2.setText(chtext.get(index));
+            viewHolder.textView1.setText(cont.getMessages().get(index).getAuthor());
+            viewHolder.textView2.setText("" + cont.getMessages().get(index).getText());
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return rowView;
     }

@@ -1,24 +1,37 @@
 package com.housinghack;
 
 /**
- * Created by susee on 25/4/15.
+ * Created by susee on 26/4/15.
  */
 
 import android.content.Context;
+import android.graphics.drawable.RippleDrawable;
+import android.os.Build;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
+import android.widget.TextView;
 
-public class GalHelper extends BaseAdapter {
+import com.housinghack.entities.UserCollection;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
+
+public class GalleryImageAdapter extends BaseAdapter {
 
     private Context mContext;
-    int[] data = {R.drawable.room1, R.drawable.room2, R.drawable.room3, R.drawable.room1, R.drawable.room2,};
+    UserCollection user;
 
 
-    public GalHelper(Context context) {
+    public GalleryImageAdapter(Context context, UserCollection user) {
         mContext = context;
+        this.user = user;
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, Throwable e) {
@@ -29,7 +42,7 @@ public class GalHelper extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return data.length;
+        return user.getUsers().size();
     }
 
     @Override
@@ -43,7 +56,7 @@ public class GalHelper extends BaseAdapter {
     }
 
     static class ViewHolder {
-        public ImageView imageView;
+        public TextView textView;
     }
 
     // Override this method according to your need
@@ -55,19 +68,18 @@ public class GalHelper extends BaseAdapter {
             if (rowView == null) {
                 LayoutInflater inflater = (LayoutInflater) mContext
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                rowView = inflater.inflate(R.layout.galleryview, viewGroup, false);
+                rowView = inflater.inflate(R.layout.gallery, viewGroup, false);
                 ViewHolder viewHolder = new ViewHolder();
-                viewHolder.imageView = (ImageView) rowView
-                        .findViewById(R.id.imageview1);
+                viewHolder.textView = (TextView) rowView
+                        .findViewById(R.id.galtxt);
                 rowView.setTag(viewHolder);
             }
             ViewHolder viewHolder = (ViewHolder) rowView.getTag();
-            viewHolder.imageView.setImageResource(data[index]);
+            viewHolder.textView.setText(user.getUsers().get(index).getName());
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return rowView;
     }
 
 }
-

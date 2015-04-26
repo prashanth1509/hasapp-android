@@ -1,10 +1,13 @@
 package com.housinghack.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.List;
 
 /**
  * Created by prashanth.a on 25/04/15.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Attribute {
     public String atid, type, text, title;
     public List<User> votesUp;

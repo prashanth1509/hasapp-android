@@ -48,16 +48,25 @@
             <Gallery
                 android:layout_width="match_parent"
                 android:id="@+id/gallery1"
-                android:layout_height="170dp"/>
+                android:layout_height="150dp"/>
             <TextView
                 android:layout_width="match_parent"
                 android:text="Chat History"
                 android:gravity="center"
-                android:padding="8dp"
+                android:padding="5dp"
                 android:textSize="20dp"
                 android:textColor="#fff"
+                android:layout_marginBottom="2dp"
                 android:background="#7307BA"
                 android:layout_height="wrap_content" />
+            <org.lucasr.twowayview.TwoWayView
+                android:id="@+id/lvItems"
+                style="@style/TwoWayView"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="#7307BA"
+                android:drawSelectorOnTop="false"
+                tools:context=".MainActivity" />
             <ListView
                 android:layout_width="match_parent"
                 android:id="@+id/list1"
@@ -73,11 +82,15 @@
             android:layout_height="50sp">
             <EditText
                 android:layout_width="0dp"
+                android:id="@+id/sendtext"
                 android:layout_weight="0.9"
+                android:textColor="#fff"
+                android:paddingLeft="10dp"
                 android:layout_height="match_parent" />
             <ImageView
                 android:layout_width="0dip"
                 android:layout_weight="0.15"
+                android:onClick="send"
                 android:src="@android:drawable/ic_menu_send"
                 android:layout_height="match_parent" />
             </LinearLayout>

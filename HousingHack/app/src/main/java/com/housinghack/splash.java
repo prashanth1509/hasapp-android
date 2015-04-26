@@ -14,18 +14,27 @@ public class splash extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        final Intent intent=new Intent(this,Login.class);
-        Thread th=new Thread(){
-          public void run(){
-              try {
-                  Thread.sleep(2000);
-                  finish();
-                  startActivity(intent);
-              }catch (Exception e){
+        //default Exception Handler
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread thread, Throwable e) {
+                e.printStackTrace();
+            }
+        });
+        //thread for splash
+        final Intent intent = new Intent(this, Login.class);
+        Thread th = new Thread() {
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                    finish();
+                    startActivity(intent);
+                } catch (Exception e) {
 
-              }
-          }
-        };th.start();
+                }
+            }
+        };
+        th.start();
     }
 
 

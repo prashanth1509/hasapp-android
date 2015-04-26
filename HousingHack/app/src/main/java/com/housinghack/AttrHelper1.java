@@ -12,21 +12,29 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.housinghack.entities.AttributeCollection;
+
 import java.util.ArrayList;
 
 public class AttrHelper1 extends BaseAdapter {
 
     private Context mContext;
-    public ArrayList<String> atr;
+    public AttributeCollection atr;
 
-    public AttrHelper1(Context context,ArrayList<String> name) {
+    public AttrHelper1(Context context, AttributeCollection name) {
         mContext = context;
-        this.atr=name;
+        this.atr = name;
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread thread, Throwable e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
     public int getCount() {
-        return atr.size();
+        return atr.attributeList.size();
     }
 
     @Override
@@ -42,11 +50,12 @@ public class AttrHelper1 extends BaseAdapter {
     static class ViewHolder {
         public TextView textView1;
         public TextView textView2;
+        public TextView textView3;
     }
 
     // Override this method according to your need
     @Override
-    public View getView(int index,View view, ViewGroup viewGroup) {
+    public View getView(int index, View view, ViewGroup viewGroup) {
         // TODO Auto-generated method stub
         View rowView = view;
         try {
@@ -56,15 +65,22 @@ public class AttrHelper1 extends BaseAdapter {
                 rowView = inflater.inflate(R.layout.attrhelper1, viewGroup, false);
                 ViewHolder viewHolder = new ViewHolder();
                 viewHolder.textView1 = (TextView) rowView
-                        .findViewById(R.id.atrname);
+                        .findViewById(R.id.attrname);
+                viewHolder.textView2 = (TextView) rowView
+                        .findViewById(R.id.like);
+                viewHolder.textView3 = (TextView) rowView
+                        .findViewById(R.id.unlike);
+                rowView.setTag(viewHolder);
             }
             ViewHolder viewHolder = (ViewHolder) rowView.getTag();
-            viewHolder.textView1.setText(atr.get(index));
-        } catch (Exception e) {
+            viewHolder.textView1.setText(atr.attributeList.get(index).title);
+            viewHolder.textView2.setText("" + atr.attributeList.get(index).getVotesUp().size());
+            viewHolder.textView3.setText("" + atr.attributeList.get(index).getVotesDown().size());
 
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return rowView;
     }
 
 }
-
